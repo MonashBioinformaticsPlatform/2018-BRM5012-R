@@ -1,0 +1,80 @@
+---
+title: "BRM5012 R practical"
+output: 
+    ioslides_presentation:
+        widescreen: true
+        smaller: true
+        css: style.css
+---
+
+## What is R?
+
+A language for data science and statistics.
+
+
+## Reproducible research
+
+
+## Data science skills are generic
+
+* Load data
+* Tidy
+* Explore, visualize
+* Transform
+* Summarize, model, test
+* Report
+
+<div class="extra">
+
+</div>
+
+
+## Bioconductor
+
+<div class="extra">
+Biological data can be large and messy and sometimes needs specialized tools.
+</div>
+
+
+## Things we won't be covering
+
+* Statistical modelling (lm, etc)
+
+
+## Workshop format
+
+* Follow presenter in your own RStudio session, with variations. Try things out!
+
+* We're here to teach, ask for help early.
+
+* Short challenges to apply what you are learning.
+
+* Etherpad to share challenge solutions. Alternative place to ask questions.
+
+### Sticky notes
+<div style="float: left; margin: 1em">
+ <div style="display: block !important; width: 5em; height: 5em !important; background: #e44; border-radius: 1em">
+ </div>
+
+Something is broken
+<br>It doesn't work
+<br>Something doesn't make sense
+
+(or raise hand / call out)
+</div>
+
+<div style="float: left; margin: 1em">
+ <div style="display: block !important; width: 5em; height: 5em !important; background: #4e4; border-radius: 1em">
+ </div>
+
+All good
+<br>Challenge completed
+</div>
+
+<div style="float: left; width: 10em;" class="extra">
+R cares a lot about missing punctuation.
+
+You might have missed a quote or a bracket and got R into a confused state.
+</div>
+
+

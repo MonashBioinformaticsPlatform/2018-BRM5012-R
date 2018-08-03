@@ -1,0 +1,29 @@
+---
+title: "BRM5012 R practical"
+output: 
+    html_document:
+        theme: cerulean
+        css: style.css
+---
+
+This practical workshop will consist of a generic introduction to using the R language for data science followed by an introduction to the [Bioconductor project](https://www.bioconductor.org/), which provides packages useful for bioinformatics.
+
+During the workshop we will be using R on a server we run. However R is free, and you can install it on your own computer. There are two things to download and install:
+
+* [Download R](https://cran.rstudio.com/)
+* [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+(R is the language itself. RStudio provides a convenient environment in which to use R.)
+
+
+## Course material
+
+* [Slideshow](slides/slides.html)
+
+* [Introduction to R](https://monashdatafluency.github.io/r-intro-2/)
+
+* [Introduction to Bioconductor](topics/bioconductor.html)
+
+<br>
+
+[Source code on GitHub](https://github.com/MonashBioinformaticsPlatform/2018-BRM5012-R)
