@@ -18,11 +18,20 @@ During the workshop we will be using R on a server we run. However R is free, an
 
 ## Course material
 
-* [Slideshow](slides/slides.html)
+* [Introduction to R slideshow](slides/slides.pdf)
 
-* [Introduction to R](https://monashdatafluency.github.io/r-intro-2/)
+* [Introduction to R workshop material](https://monashdatafluency.github.io/r-intro-2/)
 
-* [Introduction to Bioconductor](topics/bioconductor.html)
+* [Introduction to Bioconductor slideshow](slides/bioconductor_slides.pdf)
+
+* [Introduction to Bioconductor workshop material](topics/bioconductor.html)
+
+
+## Further reading
+
+* [R for Data Science](http://r4ds.had.co.nz/)
+
+
 
 <br>
 

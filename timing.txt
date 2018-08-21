@@ -1,0 +1,33 @@
+
+Typical Introduction to R v2 schedule
+
+7hours - 1.5hours break = 5.5hours
+
+0.5 setup
+1.5 intro
+1.5 df
+1   gg
+1   summary
+
+
+
+BRM5012 Prac schedule
+
+Mon 9am-1pm = 4hours  (-0.5hours break? It's quite long)
+9:00  0.5 setup
+9:30  1.5 intro
+11:00 1.5 df
+12:30 0.5 gg
+ 1:00
+
+Tue 2pm-5pm = 3hours
+
+ 2:00 0.5 gg
+ 2:30 1   summary, wrap up
+ 3:30 1.5 bioc (0.5 talk, 1 prac)
+
+(Or start gg on Tuesday, 1 hour for each topic on Tuesday, depending on how things go.)
+
+
+Present using dspdfviewer.
+

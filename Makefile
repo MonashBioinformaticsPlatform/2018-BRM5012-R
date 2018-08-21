@@ -1,15 +1,14 @@
 
-RMDS=index.Rmd slides/slides.Rmd topics/bioconductor.Rmd
+HTMLS=index.html topics/bioconductor.html
+PDFS=slides/slides.pdf slides/bioconductor_slides.pdf
 
-HTMLS=$(patsubst %.Rmd,%.html,$(RMDS))
+all : $(HTMLS) $(PDFS)
 
-all : $(HTMLS)
-
-%.html : %.Rmd slides/slides_presenter.html
+%.html : %.Rmd
 	Rscript -e 'rmarkdown::render("$<", "all")'
 
-slides/slides_presenter.html : slides/slides.Rmd slides/style_presenter.css Makefile
-	Rscript -e 'rmarkdown::render("$<", output_file="slides_presenter.html", output_options=list(css="style_presenter.css"))' 
+%.pdf : %.Rmd
+	Rscript -e 'rmarkdown::render("$<", "all")'
 
 clean :
-	rm -f $(HTMLS)
+	rm -f $(HTMLS) $(PDFS)

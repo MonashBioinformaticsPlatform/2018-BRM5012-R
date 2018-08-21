@@ -1,18 +1,36 @@
 ---
 title: "BRM5012 R practical"
-output: 
-    ioslides_presentation:
-        widescreen: true
-        smaller: true
-        css: style.css
+output: beamer_presentation
+beameroption: "show notes on second screen=right"
+fontsize: 10pt
+header-includes:
+ - \usepackage{tikz}
 ---
 
 ## What is R?
 
 A language for data science and statistics.
 
+Free to use and build on.
 
-## Reproducible research
+Many contributors and packages.
+
+
+## R and RStudio
+
+R is a programming language.
+
+* Can be used directly from the "command line".
+
+RStudio is an environment for using R, either locally or over the web.
+
+\includegraphics[height=2in]{rstudio.png}
+
+\note{
+We're using RStudio over the web today.
+
+Can install on your own laptop. Need to install both R and RStudio.
+}
 
 
 ## Data science skills are generic
@@ -21,60 +39,109 @@ A language for data science and statistics.
 * Tidy
 * Explore, visualize
 * Transform
-* Summarize, model, test
+* Summarize, model, statistical testing
 * Report
 
-<div class="extra">
+\note{
+Analysis of almost any data can be viewed as being made of these steps.
 
-</div>
+We can learn to recognize these steps. Something is wrong if one of them is missing.
+
+These are interconnected steps, eg exploration informs transformation and testing.
+}
+
+
+## R makes data science reproducible and automated
+
+An "R script" is text that
+
+* describes exactly what the computer should do.
+* is a record of exactly what was done.
+
+Can be turned into "functions" that become the building block of future analysis.
+
+\note{
+Excel or a statistics program may be easier to use, but can be hard to describe steps taken.
+}
+
+
+## Tidyverse
+
+A modern collection of R packages that work well together, mostly written by Hadley Wickham.
+
+* `dplyr` for manipulating tabular data
+* `ggplot2` for visualization
+
+\note{
+R has 4 decades of history behind it.
+
+Today we're going to be looking at two particular flavours of R: the "tidyverse" and "bioconductor".
+}
 
 
 ## Bioconductor
 
-<div class="extra">
-Biological data can be large and messy and sometimes needs specialized tools.
-</div>
+Bioconductor is a repository of R packages for working with biological data.
+
+* Special data types and file formats.
+
+* Need to deal with large quantity of data.
+
+* $p \gg n$, high throughput experiments often produce detailed information about a small number of biological samples, requiring special statistical methods.
 
 
-## Things we won't be covering
+## Aims for these practicals
 
-* Statistical modelling (lm, etc)
+* Hands on experience using R.
+
+* Enough about the tidyverse for it to be immediately useful.
+
+* Know enough to know the next question to ask, and where to look for the answer.
+
+Not aiming to cover
+
+* Statistical modelling and testing (`lm`, etc).
+
+* Bioconductor in depth.
+
+**Developing fluency in R will take further reading and practice.**
+
+\note{
+Tidyverse flavour of R is an essential skill, something any lab scientist should know.
+
+Bioconductor requires more work to master, is a more specialized skill, has sub-specialities.
+}
 
 
 ## Workshop format
 
 * Follow presenter in your own RStudio session, with variations. Try things out!
 
-* We're here to teach, ask for help early.
-
 * Short challenges to apply what you are learning.
 
 * Etherpad to share challenge solutions. Alternative place to ask questions.
 
 ### Sticky notes
-<div style="float: left; margin: 1em">
- <div style="display: block !important; width: 5em; height: 5em !important; background: #e44; border-radius: 1em">
- </div>
 
-Something is broken
-<br>It doesn't work
-<br>Something doesn't make sense
+\begin{tikzpicture}
+\fill[fill=green] (2,0) rectangle (4,2);
+\draw (3,-0.3) node {All good};
+\draw (3,-0.6) node {Challenge completed};
 
-(or raise hand / call out)
-</div>
+\fill[fill=red] (6,0) rectangle (8,2);
+\draw (7,-0.3) node {Something is broken};
+\draw (7,-0.6) node {It doesn't work};
+\draw (7,-0.9) node {Something doesn't make sense};
+\draw (7,-1.5) node {(or raise hand / call out)};
+\end{tikzpicture}
 
-<div style="float: left; margin: 1em">
- <div style="display: block !important; width: 5em; height: 5em !important; background: #4e4; border-radius: 1em">
- </div>
+\note{
+We're here to teach, ask for help early.
 
-All good
-<br>Challenge completed
-</div>
+R cares a lot about missing punctuation. Easy to miss a quote or a bracket and get R into a confused state.
 
-<div style="float: left; width: 10em;" class="extra">
-R cares a lot about missing punctuation.
+Digressions are good.
+}
 
-You might have missed a quote or a bracket and got R into a confused state.
-</div>
 
 
