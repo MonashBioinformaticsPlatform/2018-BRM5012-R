@@ -27,11 +27,23 @@ During the workshop we will be using R on a server we run. However R is free, an
 * [Introduction to Bioconductor workshop material](topics/bioconductor.html)
 
 
+## Files
+
+On the day, these files will already be on the server we are using. Download them here to work with them elsewhere.
+
+* [BRM5012-files.zip](BRM5012-files.zip)
+
 ## Further reading
 
-* [R for Data Science](http://r4ds.had.co.nz/)
+This book fills in further details about using Tidyverse packages:
 
+* ["R for Data Science" by Garrett Grolemund and Hadley Wickham](http://r4ds.had.co.nz/)
 
+Bioconductor is a moving target, so books you find may be out of date. We recommend reading vignettes of relevant packages. Various workshop materials and publications are available to provide an overview.
+
+* [Bioconductor](https://bioconductor.org/)
+
+* [Some further pointers](https://monashdatafluency.github.io/r-intro-2/next-steps.html)
 
 <br>
 

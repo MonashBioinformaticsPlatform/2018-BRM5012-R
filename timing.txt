@@ -29,5 +29,18 @@ Tue 2pm-5pm = 3hours
 (Or start gg on Tuesday, 1 hour for each topic on Tuesday, depending on how things go.)
 
 
-Present using dspdfviewer.
+Present using 
+dspdfviewer -d1 -p0 -s0 slides/slides.pdf
+dspdfviewer -d1 -p0 -s0 slides/bioconductor_slides.pdf
+
+(Don't use pdfpc --notes=right.)
+
+
+
+Get e.coli
+Look at start and stop codons
+AnnotationHub is a dumpster fire
+
+
+
 

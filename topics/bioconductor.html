@@ -364,8 +364,280 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#installing-and-loading-bioconctor-packages">Installing and loading Bioconctor packages</a></li>
+<li><a href="#dnastring">DNAString</a></li>
+<li><a href="#dnastringset">DNAStringSet</a></li>
+<li><a href="#granges">GRanges</a></li>
+<li><a href="#loading-files">Loading files</a></li>
+<li><a href="#gene-annotation-gene-transcript-exon-and-cds-ranges">Gene annotation: gene, transcript, exon, and CDS ranges</a></li>
+<li><a href="#seqinfo">Seqinfo</a></li>
+<li><a href="#wrap-up">Wrap up</a></li>
+</ul>
+</div>
+
+<div id="installing-and-loading-bioconctor-packages" class="section level1">
+<h1>Installing and loading Bioconctor packages</h1>
+<p>Most R packages are available on the CRAN package repository, and installed using <code>install.packages()</code>. Bioconductor is another specialized repository devoted to bioinformatics R packages. Here is how to install packages from Bioconductor:</p>
+<pre class="r"><code>## Don't run this if you are using our server, the packages are already installed!
+## Loads the Bioconductor installer:
+# source(&quot;https://bioconductor.org/biocLite.R&quot;)
+#
+## Install a basic set of packages
+# biocLite()
+#
+## Install further packages used in this tutorial
+# biocLite(c(
+#    &quot;Biostrings&quot;,
+#    &quot;GenomicRanges&quot;,
+#    &quot;GenomicFeatures&quot;,
+#    &quot;rtracklayer&quot;,
+#    &quot;BSgenome&quot;, 
+#    &quot;plyranges&quot;
+#))</code></pre>
+<p>The packages are loaded using <code>library</code>, as we loaded <code>tidyverse</code> earlier:</p>
+<pre class="r"><code>library(tidyverse)
+
+library(Biostrings)      # provides DNAString, DNAStringSet, etc
+library(GenomicRanges)   # provides GRanges
+library(GenomicFeatures) # provides TxDb
+library(rtracklayer)     # provides import
+library(BSgenome)        # provides getSeq
+library(plyranges)       # allow dplyr functions to work with GRanges</code></pre>
+<p>Bioconductor packages usually have useful documentation in the form of “vignettes”. These are readable on the <a href="https://www.bioconductor.org/packages/release/bioc/">Bioconductor website</a>, or within R:</p>
+<pre class="r"><code>vignette()
+vignette(package=&quot;GenomicRanges&quot;)
+vignette(&quot;GenomicRangesHOWTOs&quot;)</code></pre>
+</div>
+<div id="dnastring" class="section level1">
+<h1>DNAString</h1>
+<p>Package <code>Biostrings</code> offers classes for storing DNA strings, <code>DNAString</code>, amino acid sequences, <code>AAString</code>, or anything else in a <code>BString</code>. These are like character strings, but a variety of biologically meaningful functions can be applied to them.</p>
+<pre class="r"><code>myseq &lt;- DNAString(&quot;ACCATTGATTAT&quot;)
+myseq</code></pre>
+<pre><code>##   12-letter &quot;DNAString&quot; instance
+## seq: ACCATTGATTAT</code></pre>
+<pre class="r"><code>class(myseq)</code></pre>
+<pre><code>## [1] &quot;DNAString&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;Biostrings&quot;</code></pre>
+<pre class="r"><code>reverseComplement(myseq)</code></pre>
+<pre><code>##   12-letter &quot;DNAString&quot; instance
+## seq: ATAATCAATGGT</code></pre>
+<pre class="r"><code>translate(myseq)</code></pre>
+<pre><code>##   4-letter &quot;AAString&quot; instance
+## seq: TIDY</code></pre>
+<pre class="r"><code>subseq(myseq, 3,5)</code></pre>
+<pre><code>##   3-letter &quot;DNAString&quot; instance
+## seq: CAT</code></pre>
+<pre class="r"><code>myseq[3:5]</code></pre>
+<pre><code>##   3-letter &quot;DNAString&quot; instance
+## seq: CAT</code></pre>
+<pre class="r"><code>as.character(myseq)</code></pre>
+<pre><code>## [1] &quot;ACCATTGATTAT&quot;</code></pre>
+<p>You can see a complete set of functions that work with DNAString with:</p>
+<pre class="r"><code>methods(class=&quot;DNAString&quot;)</code></pre>
+<p>You can see get help on the <code>DNAString</code> class with:</p>
+<pre class="r"><code>?&quot;DNAString-class&quot;</code></pre>
+</div>
+<div id="dnastringset" class="section level1">
+<h1>DNAStringSet</h1>
+<p>Often we want to work with a list of sequences, such as chromosomes.</p>
+<pre class="r"><code>myset &lt;- DNAStringSet( list(chrI=myseq, chrII=DNAString(&quot;ACGTACGT&quot;)) )
+myset</code></pre>
+<pre><code>##   A DNAStringSet instance of length 2
+##     width seq                                          names               
+## [1]    12 ACCATTGATTAT                                 chrI
+## [2]     8 ACGTACGT                                     chrII</code></pre>
+<pre class="r"><code># A DNAStringSet is list-like
+myset$chrII</code></pre>
+<pre><code>##   8-letter &quot;DNAString&quot; instance
+## seq: ACGTACGT</code></pre>
+<pre class="r"><code># or myset[[&quot;chrII&quot;]]
+# or myset[[2]]</code></pre>
+</div>
+<div id="granges" class="section level1">
+<h1>GRanges</h1>
+<p>We may then wish to refer to regions of these sequences, often with an associated strand. This is done with the <code>GRanges</code> type. <code>GRanges</code> builds on <code>IRanges</code>, “integer ranges”. An IRanges has starts and ends. A GRanges additionally has sequence names and strand information.</p>
+<p>A GRanges can contain multiple ranges, but we initially demonstrate it with a single range.</p>
+<pre class="r"><code>myrange &lt;- GRanges(&quot;chrI&quot;, IRanges(start=3,end=5), strand=&quot;+&quot;)
+myrange</code></pre>
+<pre><code>## GRanges object with 1 range and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chrI       3-5      +
+##   -------
+##   seqinfo: 1 sequence from an unspecified genome; no seqlengths</code></pre>
+<pre class="r"><code>getSeq(myset, myrange)</code></pre>
+<pre><code>##   A DNAStringSet instance of length 1
+##     width seq
+## [1]     3 CAT</code></pre>
+<p>Note that if the range were on the reverse strand, <code>getSeq</code> would automatically take the reverse complement.</p>
+<p>Accessing GRanges data:</p>
+<pre class="r"><code>seqnames(myrange)</code></pre>
+<pre><code>## factor-Rle of length 1 with 1 run
+##   Lengths:    1
+##   Values : chrI
+## Levels(1): chrI</code></pre>
+<pre class="r"><code>start(myrange)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>end(myrange)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>strand(myrange)</code></pre>
+<pre><code>## factor-Rle of length 1 with 1 run
+##   Lengths: 1
+##   Values : +
+## Levels(3): + - *</code></pre>
+<pre class="r"><code>as.data.frame(myrange)</code></pre>
+<pre><code>##   seqnames start end width strand
+## 1     chrI     3   5     3      +</code></pre>
+<div id="question" class="section level2 challenge">
+<h2>Question</h2>
+<p>Based on what we saw for <code>DNAString</code>, how can we learn more about using <code>GRanges</code> and <code>IRanges</code> objects?</p>
+</div>
+<div id="challenge" class="section level2 challenge">
+<h2>Challenge</h2>
+<p>Reverse complement the following DNA sequence and then translate to an amino acid sequence:</p>
+<pre><code>TTCCATTTCCAT</code></pre>
+</div>
+</div>
+<div id="loading-files" class="section level1">
+<h1>Loading files</h1>
+<p>Files can be loaded using the <code>import</code> function from <code>rtracklater</code>.</p>
+<pre class="r"><code>seq &lt;- import(&quot;BRM5012-files/ecoli.fasta&quot;)
+gr &lt;- import(&quot;BRM5012-files/ecoli.gtf&quot;)</code></pre>
+<p>DNA sequences are usually given in the FASTA file format. Genome annotations are available in a variety of text formats such as GFF3 and GTF. This GTF file is also from Ensembl, and gives the locations of the genes in the genome, and features within them.</p>
+</div>
+<div id="gene-annotation-gene-transcript-exon-and-cds-ranges" class="section level1">
+<h1>Gene annotation: gene, transcript, exon, and CDS ranges</h1>
+<p>The <code>plyranges</code> package makes tidyverse functions such as <code>filter</code> and <code>arrange</code> usable with GRanges, as well as providing operations that specifically make sense for GRanges such as finding overlapping ranges. (Many of these are also provided by the GenomicRanges package, but with a less “tidy” interface.)</p>
+<p>Let’s look at the features associated with the gene “lacY”.</p>
+<pre class="r"><code>filter(gr, gene_name == &quot;lacY&quot;)</code></pre>
+<pre><code>## GRanges object with 6 ranges and 19 metadata columns:
+##         seqnames        ranges strand |   source        type     score
+##            &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;factor&gt;    &lt;factor&gt; &lt;numeric&gt;
+##   [1] Chromosome 363824-365077      - |      ena        gene      &lt;NA&gt;
+##   [2] Chromosome 363824-365077      - |      ena  transcript      &lt;NA&gt;
+##   [3] Chromosome 363824-365077      - |      ena        exon      &lt;NA&gt;
+##   [4] Chromosome 363827-365077      - |      ena         CDS      &lt;NA&gt;
+##   [5] Chromosome 365075-365077      - |      ena start_codon      &lt;NA&gt;
+##   [6] Chromosome 363824-363826      - |      ena  stop_codon      &lt;NA&gt;
+##           phase     gene_id gene_version   gene_name gene_source
+##       &lt;integer&gt; &lt;character&gt;  &lt;character&gt; &lt;character&gt; &lt;character&gt;
+##   [1]      &lt;NA&gt;  ER3413_351            1        lacY         ena
+##   [2]      &lt;NA&gt;  ER3413_351            1        lacY         ena
+##   [3]      &lt;NA&gt;  ER3413_351            1        lacY         ena
+##   [4]         0  ER3413_351            1        lacY         ena
+##   [5]         0  ER3413_351            1        lacY         ena
+##   [6]         0  ER3413_351            1        lacY         ena
+##         gene_biotype transcript_id transcript_version transcript_name
+##          &lt;character&gt;   &lt;character&gt;        &lt;character&gt;     &lt;character&gt;
+##   [1] protein_coding          &lt;NA&gt;               &lt;NA&gt;            &lt;NA&gt;
+##   [2] protein_coding      AIZ53215                  1          lacY-1
+##   [3] protein_coding      AIZ53215                  1          lacY-1
+##   [4] protein_coding      AIZ53215                  1          lacY-1
+##   [5] protein_coding      AIZ53215                  1          lacY-1
+##   [6] protein_coding      AIZ53215                  1          lacY-1
+##       transcript_source transcript_biotype exon_number     exon_id
+##             &lt;character&gt;        &lt;character&gt; &lt;character&gt; &lt;character&gt;
+##   [1]              &lt;NA&gt;               &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+##   [2]               ena     protein_coding        &lt;NA&gt;        &lt;NA&gt;
+##   [3]               ena     protein_coding           1  AIZ53215-1
+##   [4]               ena     protein_coding           1        &lt;NA&gt;
+##   [5]               ena     protein_coding           1        &lt;NA&gt;
+##   [6]               ena     protein_coding           1        &lt;NA&gt;
+##       exon_version  protein_id protein_version
+##        &lt;character&gt; &lt;character&gt;     &lt;character&gt;
+##   [1]         &lt;NA&gt;        &lt;NA&gt;            &lt;NA&gt;
+##   [2]         &lt;NA&gt;        &lt;NA&gt;            &lt;NA&gt;
+##   [3]            1        &lt;NA&gt;            &lt;NA&gt;
+##   [4]         &lt;NA&gt;    AIZ53215               1
+##   [5]         &lt;NA&gt;        &lt;NA&gt;            &lt;NA&gt;
+##   [6]         &lt;NA&gt;        &lt;NA&gt;            &lt;NA&gt;
+##   -------
+##   seqinfo: 1 sequence from an unspecified genome; no seqlengths</code></pre>
+<p>Look at the different types in the “type” column. Each “gene” may have multiple “transcript” features (isoforms). Each transcript in turn has a set of “exon” features, and if it is a protein coding gene, a set of “CDS” (coding sequence) features. The CDS features cover a subset of the bases covered by the exon features.</p>
+<pre><code>--------------------------------------------------&gt; gene
+
+--------------------------------------------&gt;       transcript
+----------&gt;         ---&gt;    ----------------&gt;       exon
+      ----&gt;         ---&gt;    ----------&gt;             CDS
 
 
+               -----------------------------------&gt; transcript
+               --------&gt;       ----&gt;    ----------&gt; exon
+                    ---&gt;       ----&gt;    --&gt;         CDS
+</code></pre>
+<p>Bacteria are simple in that each gene has one transcript, and each transcript has one exon and one coding sequence.</p>
+<p>Suppose we want to extract all the coding sequences. We will use a method to do this that works even if genes have multiple transcripts and transcripts have multiple exons, as this is necessary when working with eukaryotes.</p>
+<pre class="r"><code>db &lt;- makeTxDbFromGRanges(gr)</code></pre>
+<pre><code>## Warning in .get_cds_IDX(type, phase): The &quot;phase&quot; metadata column contains non-NA values for features of
+##   type stop_codon. This information was ignored.</code></pre>
+<pre class="r"><code>cds_list &lt;- cdsBy(db, by=&quot;tx&quot;, use.names=TRUE)
+cds_seqs &lt;- extractTranscriptSeqs(seq, cds_list)
+cds_lengths &lt;- lengths(cds_seqs)
+
+translate(cds_seqs)</code></pre>
+<pre><code>##   A AAStringSet instance of length 4051
+##        width seq                                       names               
+##    [1]    22 MKRISTTITTTITITTGNGAG*                    AIZ54182
+##    [2]   821 MRVLKFGGTSVANAERFLR...AAGVFADLLRTLSWKLGV* AIZ50783
+##    [3]   311 MVKVYAPASSANMSVGFDV...GFVHICRLDTAGARVLEN* AIZ51761
+##    [4]   429 MKLYNLKDHNEQVSFAQAV...HNLPADFAALRKLMMNHQ* AIZ52710
+##    [5]    99 VKKMQSIVLALSLVLVAPM...KKAPHDHHGGHGPGKHHR* AIZ53685
+##    ...   ... ...
+## [4047]   215 MARTKLKFRLHRAVIVLFC...LLTASKPVPEEEESEKKE* AIZ54159
+## [4048]   556 VAQFVYTMHRVGKVVPPKR...LGADALEPKRIKYKRIAK* AIZ54165
+## [4049]   171 MHQVVCATTNPAKIQAILQ...VYHQAVILALSPFHNAVY* AIZ54168
+## [4050]   290 MDQAGIIRDLLIWLEGHLD...AGDRPINLRCELLIPIRR* AIZ54169
+## [4051]   239 MQTPHILIVEDELVTRNTL...IIATIHGEGYRFCGDLED* AIZ54176</code></pre>
+<pre class="r"><code>stops &lt;- subseq(cds_seqs, cds_lengths-2, cds_lengths)
+table(stops)</code></pre>
+<pre><code>## stops
+##  TAA  TAG  TGA 
+## 2621  279 1151</code></pre>
+<p>This is a lot to take in. If you wish to use this in earnest you should read over the vignettes and reference documentation of the <code>GenomicRanges</code>, <code>GenomicFeatures</code> and <code>plyranges</code> packages.</p>
+<p><code>table</code> is similar to <code>count</code> that we saw earlier, but operates on vectors directly rather than data frames. If we wanted to do this the tidy way we need to first put things in a data frame. It can be a bit of a chore moving between Bioconductor and Tidyverse!</p>
+<pre class="r"><code>stops_df &lt;- data_frame(stop=as.character(stops))
+count(stops_df, stop)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   stop      n
+##   &lt;chr&gt; &lt;int&gt;
+## 1 TAA    2621
+## 2 TAG     279
+## 3 TGA    1151</code></pre>
+<div id="challenge-1" class="section level2 challenge">
+<h2>Challenge</h2>
+<p>The start codon is the first three bases of a coding sequence. Get the start codons of each coding sequence. What is the most common start codon?</p>
+</div>
+</div>
+<div id="seqinfo" class="section level1">
+<h1>Seqinfo</h1>
+<p>We mention Seqinfo objects mostly because they are something you may trip over if they are wrong.</p>
+<p>GRanges and DNAStringSet have a “seqinfo” attribute. This mostly acts as a safety check. One thing this specifies is which chromosomes are circular, and this alters the behaviour of some operations. Bacterial DNA is circular, so we can amend the seqinfo associated with our various objects to reflect this.</p>
+<pre class="r"><code>seqinfo(seq)</code></pre>
+<pre><code>## Seqinfo object with 1 sequence from an unspecified genome:
+##   seqnames   seqlengths isCircular genome
+##   Chromosome    4558660         NA   &lt;NA&gt;</code></pre>
+<pre class="r"><code>seqinfo(gr)</code></pre>
+<pre><code>## Seqinfo object with 1 sequence from an unspecified genome; no seqlengths:
+##   seqnames   seqlengths isCircular genome
+##   Chromosome         NA         NA   &lt;NA&gt;</code></pre>
+<pre class="r"><code>si &lt;- seqinfo(seq)
+isCircular(si) &lt;- TRUE
+si</code></pre>
+<pre><code>## Seqinfo object with 1 sequence (1 circular) from an unspecified genome:
+##   seqnames   seqlengths isCircular genome
+##   Chromosome    4558660       TRUE   &lt;NA&gt;</code></pre>
+<pre class="r"><code>seqinfo(seq) &lt;- si
+seqinfo(gr) &lt;- si</code></pre>
+<p>It’s not uncommon for chromosomes to be given slightly different names in different files, eg with or without a “chr” prefix. The <code>renameSeqlevels</code> function can be used to fix this.</p>
+<p>It’s also important to make sure the same genome assembly has been used for your data. For example the current human reference genome is “hg38” but some data still uses the older “hg19” genome. Genomic ranges based on hg19 would refer to the wrong locations within the hg38 assembly, and would need to be “lifted over” to hg38 if this is the genome assembly you are using.</p>
+</div>
+<div id="wrap-up" class="section level1">
+<h1>Wrap up</h1>
+<p>This has been a whirlwind tour of one set of core classes in Bioconductor. The main thing you should take away from this is how to examine Bioconductor objects where to look for documentation. There are many many Bioconductor packages for working with specific types of data, which we hope will be accessible now that you have a general sense of how things work.</p>
+</div>
 
 
 

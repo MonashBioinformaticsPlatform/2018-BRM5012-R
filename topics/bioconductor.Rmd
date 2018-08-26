@@ -3,3 +3,231 @@ title: "Bioconductor"
 output: html_document
 ---
 
+# Installing and loading Bioconctor packages
+
+Most R packages are available on the CRAN package repository, and installed using `install.packages()`. Bioconductor is another specialized repository devoted to bioinformatics R packages. Here is how to install packages from Bioconductor:
+
+```{r eval=FALSE}
+## Don't run this if you are using our server, the packages are already installed!
+## Loads the Bioconductor installer:
+# source("https://bioconductor.org/biocLite.R")
+#
+## Install a basic set of packages
+# biocLite()
+#
+## Install further packages used in this tutorial
+# biocLite(c(
+#    "Biostrings",
+#    "GenomicRanges",
+#    "GenomicFeatures",
+#    "rtracklayer",
+#    "BSgenome", 
+#    "plyranges"
+#))
+```
+
+The packages are loaded using `library`, as we loaded `tidyverse` earlier:
+
+```{r warning=F,message=F}
+library(tidyverse)
+
+library(Biostrings)      # provides DNAString, DNAStringSet, etc
+library(GenomicRanges)   # provides GRanges
+library(GenomicFeatures) # provides TxDb
+library(rtracklayer)     # provides import
+library(BSgenome)        # provides getSeq
+library(plyranges)       # allow dplyr functions to work with GRanges
+```
+
+Bioconductor packages usually have useful documentation in the form of "vignettes". These are readable on the [Bioconductor website](https://www.bioconductor.org/packages/release/bioc/), or within R:
+
+```{r eval=FALSE}
+vignette()
+vignette(package="GenomicRanges")
+vignette("GenomicRangesHOWTOs")
+```
+
+# DNAString
+
+Package `Biostrings` offers classes for storing DNA strings, `DNAString`, amino acid sequences, `AAString`, or anything else in a `BString`. These are like character strings, but a variety of biologically meaningful functions can be applied to them.
+
+```{r}
+myseq <- DNAString("ACCATTGATTAT")
+myseq
+
+class(myseq)
+
+reverseComplement(myseq)
+translate(myseq)
+
+subseq(myseq, 3,5)
+myseq[3:5]
+
+as.character(myseq)
+```
+
+You can see a complete set of functions that work with DNAString with:
+
+```{r eval=FALSE}
+methods(class="DNAString")
+```
+
+You can see get help on the `DNAString` class with:
+
+```{r eval=FALSE}
+?"DNAString-class"
+```
+
+# DNAStringSet
+
+Often we want to work with a list of sequences, such as chromosomes.
+
+```{r}
+myset <- DNAStringSet( list(chrI=myseq, chrII=DNAString("ACGTACGT")) )
+myset
+
+# A DNAStringSet is list-like
+myset$chrII
+# or myset[["chrII"]]
+# or myset[[2]]
+```
+
+
+# GRanges
+
+We may then wish to refer to regions of these sequences, often with an associated strand. This is done with the `GRanges` type. `GRanges` builds on `IRanges`, "integer ranges". An IRanges has starts and ends. A GRanges additionally has sequence names and strand information.
+
+A GRanges can contain multiple ranges, but we initially demonstrate it with a single range.
+
+```{r}
+myrange <- GRanges("chrI", IRanges(start=3,end=5), strand="+")
+myrange
+getSeq(myset, myrange)
+```
+
+Note that if the range were on the reverse strand, `getSeq` would automatically take the reverse complement.
+
+Accessing GRanges data:
+
+```{r}
+seqnames(myrange)
+start(myrange)
+end(myrange)
+strand(myrange)
+as.data.frame(myrange)
+```
+
+## Question {.challenge}
+
+Based on what we saw for `DNAString`, how can we learn more about using `GRanges` and `IRanges` objects?
+
+
+## Challenge {.challenge}
+
+Reverse complement the following DNA sequence and then translate to an amino acid sequence:
+
+```
+TTCCATTTCCAT
+```
+
+
+
+# Loading files
+
+Files can be loaded using the `import` function from `rtracklater`.
+
+```{r}
+seq <- import("BRM5012-files/ecoli.fasta")
+gr <- import("BRM5012-files/ecoli.gtf")
+```
+
+DNA sequences are usually given in the FASTA file format. Genome annotations are available in a variety of text formats such as GFF3 and GTF. This GTF file is also from Ensembl, and gives the locations of the genes in the genome, and features within them.
+
+
+
+# Gene annotation: gene, transcript, exon, and CDS ranges
+
+The `plyranges` package makes tidyverse functions such as `filter` and `arrange` usable with GRanges, as well as providing operations that specifically make sense for GRanges such as finding overlapping ranges. (Many of these are also provided by the GenomicRanges package, but with a less "tidy" interface.)
+
+Let's look at the features associated with the gene "lacY".
+
+```{r}
+filter(gr, gene_name == "lacY")
+```
+
+Look at the different types in the "type" column. Each "gene" may have multiple "transcript" features (isoforms). Each transcript in turn has a set of "exon" features, and if it is a protein coding gene, a set of "CDS" (coding sequence) features. The CDS features cover a subset of the bases covered by the exon features.
+
+```
+--------------------------------------------------> gene
+
+-------------------------------------------->       transcript
+---------->         --->    ---------------->       exon
+      ---->         --->    ---------->             CDS
+
+
+               -----------------------------------> transcript
+               -------->       ---->    ----------> exon
+                    --->       ---->    -->         CDS
+
+```
+
+Bacteria are simple in that each gene has one transcript, and each transcript has one exon and one coding sequence.
+
+Suppose we want to extract all the coding sequences. We will use a method to do this that works even if genes have multiple transcripts and transcripts have multiple exons, as this is necessary when working with eukaryotes.
+
+```{r}
+db <- makeTxDbFromGRanges(gr)
+cds_list <- cdsBy(db, by="tx", use.names=TRUE)
+cds_seqs <- extractTranscriptSeqs(seq, cds_list)
+cds_lengths <- lengths(cds_seqs)
+
+translate(cds_seqs)
+
+stops <- subseq(cds_seqs, cds_lengths-2, cds_lengths)
+table(stops)
+```
+
+This is a lot to take in. If you wish to use this in earnest you should read over the vignettes and reference documentation of the `GenomicRanges`, `GenomicFeatures` and `plyranges` packages.
+
+`table` is similar to `count` that we saw earlier, but operates on vectors directly rather than data frames. If we wanted to do this the tidy way we need to first put things in a data frame. It can be a bit of a chore moving between Bioconductor and Tidyverse!
+
+```{r}
+stops_df <- data_frame(stop=as.character(stops))
+count(stops_df, stop)
+```
+
+## Challenge {.challenge}
+
+The start codon is the first three bases of a coding sequence. Get the start codons of each coding sequence. What is the most common start codon?
+
+
+
+# Seqinfo
+
+We mention Seqinfo objects mostly because they are something you may trip over if they are wrong.
+
+GRanges and DNAStringSet have a "seqinfo" attribute. This mostly acts as a safety check. One thing this specifies is which chromosomes are circular, and this alters the behaviour of some operations. Bacterial DNA is circular, so we can amend the seqinfo associated with our various objects to reflect this.
+
+```{r}
+seqinfo(seq)
+seqinfo(gr)
+
+si <- seqinfo(seq)
+isCircular(si) <- TRUE
+si
+
+seqinfo(seq) <- si
+seqinfo(gr) <- si
+```
+
+It's not uncommon for chromosomes to be given slightly different names in different files, eg with or without a "chr" prefix. The `renameSeqlevels` function can be used to fix this.
+
+It's also important to make sure the same genome assembly has been used for your data. For example the current human reference genome is "hg38" but some data still uses the older "hg19" genome. Genomic ranges based on hg19 would refer to the wrong locations within the hg38 assembly, and would need to be "lifted over" to hg38 if this is the genome assembly you are using.
+
+
+# Wrap up
+
+This has been a whirlwind tour of one set of core classes in Bioconductor. The main thing you should take away from this is how to examine Bioconductor objects where to look for documentation. There are many many Bioconductor packages for working with specific types of data, which we hope will be accessible now that you have a general sense of how things work.
+
+
+

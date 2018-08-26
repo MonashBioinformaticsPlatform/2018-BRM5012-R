@@ -9,15 +9,11 @@ fontsize: 10pt
 
 ### Base R
 
-```{r eval=F}
-# Example
-install.packages("glmnet")
-```
+What comes standard with R.
 
 ### Tidyverse
 
 ```{r eval=F}
-# Install entire Tidyverse
 install.packages("tidyverse")
 ```
 
@@ -34,13 +30,11 @@ biocLite("limma")
 \note{
 R has 4 decades of history.
 
-"Base R" is standard packages and CRAN, mostly designed for use by statisticians.
-
-Tidyverse is a set of modern packages, also on CRAN.
+Tidyverse is a set of modern packages.
 
 Tidyverse is easy to pick up, has made R much more widely accessible. Key concepts are tidy data and pipelines.
 
-Bioconductor is a separate package repository.
+Bioconductor is a separate package repository from CRAN (the usual package repository).
 
 Bioconductor packages are for dealing with biological data efficiently. Bioconductor is not tidy. Expect to have to work a little harder to make use of these.
 }

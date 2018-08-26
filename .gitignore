@@ -1,5 +1,6 @@
 *.Rproj
 *.sublime*
+*.tex
 
 # History files
 .Rhistory

@@ -9,9 +9,9 @@ header-includes:
 
 ## What is R?
 
-A language for data science and statistics.
+A programming language for data science and statistics.
 
-Free to use and build on.
+Open source: free to use and build on.
 
 Many contributors and packages.
 
@@ -42,6 +42,8 @@ Can install on your own laptop. Need to install both R and RStudio.
 * Summarize, model, statistical testing
 * Report
 
+See book ["R for Data Science"](http://r4ds.had.co.nz/) by Garrett Grolemund and Hadley Wickham.
+
 \note{
 Analysis of almost any data can be viewed as being made of these steps.
 
@@ -65,17 +67,44 @@ Excel or a statistics program may be easier to use, but can be hard to describe 
 }
 
 
+## R makes data science reproducible and automated
+
+```{r include=F}
+library(tidyverse)
+geo <- read_csv("BRM5012-files/geo.csv")
+gap <- read_csv("BRM5012-files/gap-minder.csv")
+gap_geo <- left_join(gap, geo, by="name")
+```
+
+```{r warning=F, fig.width=10,fig.height=5,out.width="100%"}
+ggplot(gap_geo, 
+    aes(x=gdp_percap, y=life_exp,
+        size=population, color=region)) + 
+    geom_point() + facet_wrap(~ year) + scale_x_log10()
+```
+
+\note{
+This code will make sense to you by the end of this practical.
+
+The point here is that it is text, rather than a series of steps "click on this", "click on that", ...
+
+}
+
 ## Tidyverse
 
 A modern collection of R packages that work well together, mostly written by Hadley Wickham.
+
+Key packages:
 
 * `dplyr` for manipulating tabular data
 * `ggplot2` for visualization
 
 \note{
-R has 4 decades of history behind it.
+R and predecessor S have 4 decades of history.
 
 Today we're going to be looking at two particular flavours of R: the "tidyverse" and "bioconductor".
+
+The Tidyverse is a recent development that makes R a lot more accessable for casual users.
 }
 
 
@@ -94,7 +123,7 @@ Bioconductor is a repository of R packages for working with biological data.
 
 * Hands on experience using R.
 
-* Enough about the tidyverse for it to be immediately useful.
+* Enough about tidyverse for it to be immediately useful.
 
 * Know enough to know the next question to ask, and where to look for the answer.
 
@@ -107,9 +136,9 @@ Not aiming to cover
 **Developing fluency in R will take further reading and practice.**
 
 \note{
-Tidyverse flavour of R is an essential skill, something any lab scientist should know.
+We consider the tidyverse flavour of R an essential skill, something any lab scientist should know.
 
-Bioconductor requires more work to master, is a more specialized skill, has sub-specialities.
+Bioconductor requires more work to master, is a more specialized skill, and has sub-specialities.
 }
 
 
@@ -132,7 +161,7 @@ Bioconductor requires more work to master, is a more specialized skill, has sub-
 \draw (7,-0.3) node {Something is broken};
 \draw (7,-0.6) node {It doesn't work};
 \draw (7,-0.9) node {Something doesn't make sense};
-\draw (7,-1.5) node {(or raise hand / call out)};
+\draw (7,-1.5) node {(or raise hand/call out)};
 \end{tikzpicture}
 
 \note{

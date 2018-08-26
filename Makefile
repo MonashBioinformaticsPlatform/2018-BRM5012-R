@@ -10,5 +10,8 @@ all : $(HTMLS) $(PDFS)
 %.pdf : %.Rmd
 	Rscript -e 'rmarkdown::render("$<", "all")'
 
+BRM5012-files.zip : BRM5012-files/*
+	zip -FSr BRM5012-files.zip BRM5012-files/
+
 clean :
 	rm -f $(HTMLS) $(PDFS)
