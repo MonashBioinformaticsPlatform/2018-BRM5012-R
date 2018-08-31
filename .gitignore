@@ -2,6 +2,7 @@
 *.sublime*
 *.tex
 
+
 # History files
 .Rhistory
 .Rapp.history

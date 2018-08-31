@@ -1,7 +1,7 @@
 ---
 title: "BRM5012 R practical: Bioconductor"
 output: beamer_presentation
-beameroption: "show notes on second screen=right"
+#beameroption: "show notes on second screen=right"
 fontsize: 10pt
 ---
 
@@ -9,7 +9,14 @@ fontsize: 10pt
 
 ### Base R
 
-What comes standard with R.
+Functions and types that are always available in R.
+
+### CRAN packages
+
+```{r eval=F}
+# Example
+install.packages("glmnet")
+```
 
 ### Tidyverse
 
@@ -78,7 +85,7 @@ To use Bioconductor, several further types are important.
 
 * `matrix`
 
-* `DNAString`, `DNAStringSet`, `AAString`
+* `DNAString`, `DNAStringSet`
 
 * `GRanges`
 
@@ -97,15 +104,16 @@ Bioconductor has evolved over time to cope with more complex data.
 Analysis usually occurs in the context of:
 
 * a genome assembly: DNA sequences of chromosomes 
+    * `DNAStringSet`, or `BSgenome` or `TwoBitFile`
 * gene annotations: ranges of positions in chromosome and strand
-
-More on this later in the week!
+    * `TxDb` or `EnsDb`
 
 In Bioconductor:
 
 * `AnnotationHub` package gives access to reference data from various sources
     * access specific versions, good for reproducibility
 * `rtracklayer` package to load files
+
 
 Others
 

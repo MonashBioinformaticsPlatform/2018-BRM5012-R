@@ -1,7 +1,7 @@
 ---
 title: "BRM5012 R practical"
 output: beamer_presentation
-beameroption: "show notes on second screen=right"
+#beameroption: "show notes on second screen=right"
 fontsize: 10pt
 header-includes:
  - \usepackage{tikz}
@@ -37,12 +37,20 @@ Can install on your own laptop. Need to install both R and RStudio.
 
 * Load data
 * Tidy
+
+$\quad \quad \downarrow$
+
 * Explore, visualize
 * Transform
 * Summarize, model, statistical testing
+
+$\quad \quad \downarrow$
+
 * Report
 
-See book ["R for Data Science"](http://r4ds.had.co.nz/) by Garrett Grolemund and Hadley Wickham.
+\vspace{1cm}
+
+See book "R for Data Science" http://r4ds.had.co.nz/
 
 \note{
 Analysis of almost any data can be viewed as being made of these steps.
@@ -133,7 +141,7 @@ Not aiming to cover
 
 * Bioconductor in depth.
 
-**Developing fluency in R will take further reading and practice.**
+Developing fluency in R will take further reading and practice.
 
 \note{
 We consider the tidyverse flavour of R an essential skill, something any lab scientist should know.
@@ -144,24 +152,26 @@ Bioconductor requires more work to master, is a more specialized skill, and has 
 
 ## Workshop format
 
-* Follow presenter in your own RStudio session, with variations. Try things out!
+* Follow presenter in your own RStudio session, with variations.
 
-* Short challenges to apply what you are learning.
+* Short challenges to apply what you are learning, not assessed.
 
 * Etherpad to share challenge solutions. Alternative place to ask questions.
+
+* Multiple choice questions will be given out, and will be assessed. Hand in answers at the end of each day, also records your attendance.
 
 ### Sticky notes
 
 \begin{tikzpicture}
 \fill[fill=green] (2,0) rectangle (4,2);
-\draw (3,-0.3) node {All good};
-\draw (3,-0.6) node {Challenge completed};
+\draw (3,-0.4) node {All good};
+\draw (3,-0.8) node {Challenge completed};
 
 \fill[fill=red] (6,0) rectangle (8,2);
-\draw (7,-0.3) node {Something is broken};
-\draw (7,-0.6) node {It doesn't work};
-\draw (7,-0.9) node {Something doesn't make sense};
-\draw (7,-1.5) node {(or raise hand/call out)};
+\draw (7,-0.4) node {Something is broken};
+\draw (7,-0.8) node {It doesn't work};
+\draw (7,-1.2) node {Something doesn't make sense};
+\draw (7,-1.6) node {(or raise hand/call out)};
 \end{tikzpicture}
 
 \note{

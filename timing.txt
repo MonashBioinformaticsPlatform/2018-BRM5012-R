@@ -13,18 +13,19 @@ Typical Introduction to R v2 schedule
 
 BRM5012 Prac schedule
 
-Mon 9am-1pm = 4hours  (-0.5hours break? It's quite long)
-9:00  0.5 setup
-9:30  1.5 intro
-11:00 1.5 df
-12:30 0.5 gg
+Mon 9am-1pm
+9:00  0.5hours setup
+9:30  1.5hours Starting out in R
+11:00 1.5hours Data frames
+12:30 0.5hours ggplot
  1:00
 
-Tue 2pm-5pm = 3hours
+Tue 2pm-5pm
+ 2:00 0.5hours ggplot continued
+ 2:30 1.0hours Summarizing data, wrap up
+ 3:30 1.5hours Bioconductor (0.5hours talk, 1hour prac)
 
- 2:00 0.5 gg
- 2:30 1   summary, wrap up
- 3:30 1.5 bioc (0.5 talk, 1 prac)
+(Not too worried if ggplot gets pushed to the start of Tuesday.)
 
 (Or start gg on Tuesday, 1 hour for each topic on Tuesday, depending on how things go.)
 
@@ -36,10 +37,65 @@ dspdfviewer -d1 -p0 -s0 slides/bioconductor_slides.pdf
 (Don't use pdfpc --notes=right.)
 
 
+Needed packages:
 
-Get e.coli
-Look at start and stop codons
-AnnotationHub is a dumpster fire
+CRAN:
+tidyverse
+bookdown
+
+Bioconductor:
+Biostrings
+GenomicRanges
+GenomicFeatures
+rtracklayer
+BSgenome
+plyranges
+
+
+The R code "five" is:
+
+(a) a numeric vector
+(b) a complex vector
+(c) a logical vector
+(d) a character vector
+Answer: d
+
+
+R code to add 5 to each of the numbers 2, 4, and 6 would be:
+
+(a) [ i+5 for i in (2,4,6) ]
+(b) map(x->x+5, [2,4,6])
+(c) c(2,4,6)+5
+(d) add(2,4,6,amount=5)
+Answer: c
+
+
+Rows of a data frame matching a query can be retrieved using the function:
+
+(a) filter
+(b) select_from
+(c) predicate
+(d) search
+Answer: a
+
+
+Points can be drawn in a ggplot plot by adding:
+
+(a) ggplot()
+(b) geom_point()
+(c) facet_grid(y ~ x)
+(d) plot(x,y)
+Answer: b
+
+
+A region on a chromosome such as an exon would be represented in R using:
+
+(a) a logical vector
+(b) a GRanges object from package GenomicRanges
+(c) an AAString object from package Biostrings
+(d) a GTF object from package FASTA
+Answer: b
+
 
 
 
