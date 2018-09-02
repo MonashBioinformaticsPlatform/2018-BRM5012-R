@@ -110,10 +110,9 @@ Analysis usually occurs in the context of:
 
 In Bioconductor:
 
-* `AnnotationHub` package gives access to reference data from various sources
+* `AnnotationHub` package can download reference data from various sources
     * access specific versions, good for reproducibility
-* `rtracklayer` package to load files
-
+* `import` function from `rtracklayer` package to load files
 
 Others
 
@@ -123,7 +122,7 @@ Others
 
 ## Documentation
 
-Most packages have "vignettes" explaining normal usage.
+Most packages have "vignettes" explaining normal usage, available from within R or on Bioconductor website.
 
 Information about types available with, eg:
 

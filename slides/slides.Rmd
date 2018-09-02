@@ -41,7 +41,7 @@ Can install on your own laptop. Need to install both R and RStudio.
 $\quad \quad \downarrow$
 
 * Explore, visualize
-* Transform
+* Transform, normalize
 * Summarize, model, statistical testing
 
 $\quad \quad \downarrow$

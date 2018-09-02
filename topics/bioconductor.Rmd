@@ -78,6 +78,16 @@ You can see get help on the `DNAString` class with:
 ?"DNAString-class"
 ```
 
+
+## Challenge {.challenge}
+
+Reverse complement the following DNA sequence and then translate to an amino acid sequence:
+
+```
+TTCCATTTCCAT
+```
+
+
 # DNAStringSet
 
 Often we want to work with a list of sequences, such as chromosomes.
@@ -120,15 +130,6 @@ as.data.frame(myrange)
 ## Question {.challenge}
 
 Based on what we saw for `DNAString`, how can we learn more about using `GRanges` and `IRanges` objects?
-
-
-## Challenge {.challenge}
-
-Reverse complement the following DNA sequence and then translate to an amino acid sequence:
-
-```
-TTCCATTTCCAT
-```
 
 
 
@@ -227,7 +228,7 @@ It's also important to make sure the same genome assembly has been used for your
 
 # Wrap up
 
-This has been a whirlwind tour of one set of core classes in Bioconductor. The main thing you should take away from this is how to examine Bioconductor objects where to look for documentation. There are many many Bioconductor packages for working with specific types of data, which we hope will be accessible now that you have a general sense of how things work.
+This has been a whirlwind tour of one set of core classes in Bioconductor. The main thing you should take away from this is how to examine Bioconductor objects and where to look for documentation. There are many many Bioconductor packages for working with specific types of data, which we hope will be accessible now that you have a general sense of how Bioconductor packages work.
 
 
 
