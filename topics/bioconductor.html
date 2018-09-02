@@ -372,7 +372,8 @@ $(document).ready(function () {
 <li><a href="#granges">GRanges</a></li>
 <li><a href="#loading-files">Loading files</a></li>
 <li><a href="#gene-annotation-gene-transcript-exon-and-cds-ranges">Gene annotation: gene, transcript, exon, and CDS ranges</a></li>
-<li><a href="#seqinfo">Seqinfo</a></li>
+<li><a href="#operations-on-granges">Operations on GRanges</a></li>
+<li><a href="#seqinfo-optional-section">Seqinfo (optional section)</a></li>
 <li><a href="#wrap-up">Wrap up</a></li>
 </ul>
 </div>
@@ -465,7 +466,7 @@ myset$chrII</code></pre>
 <h1>GRanges</h1>
 <p>We may then wish to refer to regions of these sequences, often with an associated strand. This is done with the <code>GRanges</code> type. <code>GRanges</code> builds on <code>IRanges</code>, “integer ranges”. An IRanges has starts and ends. A GRanges additionally has sequence names and strand information.</p>
 <p>A GRanges can contain multiple ranges, but we initially demonstrate it with a single range.</p>
-<pre class="r"><code>myrange &lt;- GRanges(&quot;chrI&quot;, IRanges(start=3,end=5), strand=&quot;+&quot;)
+<pre class="r"><code>myrange &lt;- GRanges(&quot;chrI&quot;, IRanges(3,5), &quot;+&quot;)
 myrange</code></pre>
 <pre><code>## GRanges object with 1 range and 0 metadata columns:
 ##       seqnames    ranges strand
@@ -611,9 +612,32 @@ count(stops_df, stop)</code></pre>
 <p>The start codon is the first three bases of a coding sequence. Get the start codons of each coding sequence. What is the most common start codon?</p>
 </div>
 </div>
-<div id="seqinfo" class="section level1">
-<h1>Seqinfo</h1>
-<p>We mention Seqinfo objects mostly because they are something you may trip over if they are wrong.</p>
+<div id="operations-on-granges" class="section level1">
+<h1>Operations on GRanges</h1>
+<p>The <code>GenomicRanges</code> and <code>plyranges</code> packages contain many useful operations on GRanges objects, such as obtaining flanking regions or overlapping or nearby ranges.</p>
+<p>Suppose we wanted to look at the sequence immediately upstrand of each transcript. We can get the range for each transcript with:</p>
+<pre class="r"><code>tx &lt;- transcripts(db)    # or filter(gr, type == &quot;transcript&quot;)</code></pre>
+<p>The <code>flank</code> function can then be used to get regions directly upstrand (the default) or downstrand of each range.</p>
+<pre class="r"><code>upstrand &lt;- flank(tx, 20)
+getSeq(seq, upstrand)</code></pre>
+<pre><code>##   A DNAStringSet instance of length 4257
+##        width seq
+##    [1]    20 TTACAGAGTACACAACATCC
+##    [2]    20 AAGGTAACGAGGTAACAACC
+##    [3]    20 ATGGAAGTTAGGAGTCTGAC
+##    [4]    20 CACGAGTACTGGAAAACTAA
+##    [5]    20 AATGATAAAAGGAGTAACCT
+##    ...   ... ...
+## [4253]    20 AAATTTTCAAAGGGTGGAAG
+## [4254]    20 ACATAGAGGCGAAGTCCAAC
+## [4255]    20 TTTTCTGAGTAATGCTGATT
+## [4256]    20 TGAAAGGATGAGGATATTTT
+## [4257]    20 TGGCAATTTAGGTAGCAAAC</code></pre>
+<p>By eyeball, there seems to be a fairly common “AGG” motif. De novo motif discovery could be applied to these sequences, either using external software such as <a href="http://meme-suite.org/">meme</a> or a package within Bioconductor such as <a href="https://bioconductor.org/packages/release/bioc/html/motifRG.html">motifRG</a>.</p>
+</div>
+<div id="seqinfo-optional-section" class="section level1">
+<h1>Seqinfo (optional section)</h1>
+<p>We mention Seqinfo objects mostly because they are something you may trip over if they contain wrong or inconsistent information.</p>
 <p>GRanges and DNAStringSet have a “seqinfo” attribute. This mostly acts as a safety check. One thing this specifies is which chromosomes are circular, and this alters the behaviour of some operations. Bacterial DNA is circular, so we can amend the seqinfo associated with our various objects to reflect this.</p>
 <pre class="r"><code>seqinfo(seq)</code></pre>
 <pre><code>## Seqinfo object with 1 sequence from an unspecified genome:
@@ -629,8 +653,7 @@ si</code></pre>
 <pre><code>## Seqinfo object with 1 sequence (1 circular) from an unspecified genome:
 ##   seqnames   seqlengths isCircular genome
 ##   Chromosome    4558660       TRUE   &lt;NA&gt;</code></pre>
-<pre class="r"><code>seqinfo(seq) &lt;- si
-seqinfo(gr) &lt;- si</code></pre>
+<pre class="r"><code>seqinfo(gr) &lt;- si</code></pre>
 <p>It’s not uncommon for chromosomes to be given slightly different names in different files, eg with or without a “chr” prefix. The <code>renameSeqlevels</code> function can be used to fix this.</p>
 <p>It’s also important to make sure the same genome assembly has been used for your data. For example the current human reference genome is “hg38” but some data still uses the older “hg19” genome. Genomic ranges based on hg19 would refer to the wrong locations within the hg38 assembly, and would need to be “lifted over” to hg38 if this is the genome assembly you are using.</p>
 </div>

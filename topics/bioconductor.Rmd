@@ -110,7 +110,7 @@ We may then wish to refer to regions of these sequences, often with an associate
 A GRanges can contain multiple ranges, but we initially demonstrate it with a single range.
 
 ```{r}
-myrange <- GRanges("chrI", IRanges(start=3,end=5), strand="+")
+myrange <- GRanges("chrI", IRanges(3,5), "+")
 myrange
 getSeq(myset, myrange)
 ```
@@ -202,10 +202,29 @@ count(stops_df, stop)
 The start codon is the first three bases of a coding sequence. Get the start codons of each coding sequence. What is the most common start codon?
 
 
+# Operations on GRanges
 
-# Seqinfo
+The `GenomicRanges` and `plyranges` packages contain many useful operations on GRanges objects, such as obtaining flanking regions or overlapping or nearby ranges.
 
-We mention Seqinfo objects mostly because they are something you may trip over if they are wrong.
+Suppose we wanted to look at the sequence immediately upstrand of each transcript. We can get the range for each transcript with: 
+
+```{r}
+tx <- transcripts(db)    # or filter(gr, type == "transcript")
+```
+
+The `flank` function can then be used to get regions directly upstrand (the default) or downstrand of each range.
+
+```{r}
+upstrand <- flank(tx, 20)
+getSeq(seq, upstrand)
+```
+
+By eyeball, there seems to be a fairly common "AGG" motif. De novo motif discovery could be applied to these sequences, either using external software such as [meme](http://meme-suite.org/) or a package within Bioconductor such as [motifRG](https://bioconductor.org/packages/release/bioc/html/motifRG.html).
+
+
+# Seqinfo (optional section)
+
+We mention Seqinfo objects mostly because they are something you may trip over if they contain wrong or inconsistent information.
 
 GRanges and DNAStringSet have a "seqinfo" attribute. This mostly acts as a safety check. One thing this specifies is which chromosomes are circular, and this alters the behaviour of some operations. Bacterial DNA is circular, so we can amend the seqinfo associated with our various objects to reflect this.
 
@@ -217,7 +236,6 @@ si <- seqinfo(seq)
 isCircular(si) <- TRUE
 si
 
-seqinfo(seq) <- si
 seqinfo(gr) <- si
 ```
 
