@@ -2,7 +2,7 @@
 HTMLS=index.html topics/bioconductor.html
 PDFS=slides/slides.pdf slides/bioconductor_slides.pdf
 
-all : $(HTMLS) $(PDFS)
+all : $(HTMLS) $(PDFS) BRM5012-files.zip
 
 %.html : %.Rmd
 	Rscript -e 'rmarkdown::render("$<", "all")'
