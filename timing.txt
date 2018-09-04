@@ -15,10 +15,10 @@ BRM5012 Prac schedule
 
 Mon 9am-1pm
 9:00  0.5hours setup
-9:30  1.5hours Starting out in R
-11:00 1.5hours Data frames
+9:30  1.5hours Starting out in R           -> took less time than this, actually had time for 15 minute break
+11:00 1.5hours Data frames                 -> also 15 min ahead of time, took 10 minute break
 12:30 0.5hours ggplot
- 1:00
+ 1:00 (but need to finish 10 minutes early)
 
 Tue 2pm-5pm
  2:00 0.5hours ggplot continued

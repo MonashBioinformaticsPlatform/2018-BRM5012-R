@@ -13,6 +13,8 @@ Functions and types that are always available in R.
 
 ### CRAN packages
 
+"Comprehensive R Archive Network" - main source of R packages
+
 ```{r eval=F}
 # Example
 install.packages("glmnet")
@@ -105,8 +107,13 @@ Analysis usually occurs in the context of:
 
 * a genome assembly: DNA sequences of chromosomes 
     * `DNAStringSet`, or `BSgenome` or `TwoBitFile`
-* gene annotations: ranges of positions in chromosome and strand
+* gene annotations: strand, ranges of positions in chromosome
     * `TxDb` or `EnsDb`
+
+\includegraphics[height=1.25in]{igv.png}
+
+
+## Getting reference data
 
 In Bioconductor:
 
@@ -120,7 +127,7 @@ Others
 * Data packages 
 
 
-## Documentation
+## Documentation and help
 
 Most packages have "vignettes" explaining normal usage, available from within R or on Bioconductor website.
 
@@ -129,6 +136,10 @@ Information about types available with, eg:
 ```{r eval=F}
 ?"GRanges-class"
 ```
+
+Bioconductor support site
+
+    https://support.bioconductor.org/
 
 \note{
 Aim for this session is to cover fundamentals of Bioconductor, so you can look up the package you need for your particular task and understand how to use it.
